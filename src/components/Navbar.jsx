@@ -8,7 +8,6 @@ const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(true);
   const user = useUser();
-  console.log(user);
   const {openSignIn} = useClerk();
   const navigate = useNavigate();
 
