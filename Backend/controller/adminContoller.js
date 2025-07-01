@@ -52,13 +52,39 @@ export async function getDashBoardData(req, res){
 
 export async function getAllTheShows(req, res){
     try {
-        const shows = await Show.find({showDateTime : {}})
+        const shows = await Show.find({showDateTime : {$gte : new Date()}}).populate('movie').sort({showDateTime : 1});
 
+        res.json({
+            success : true,
+            shows
+        })
     } 
     catch (error) {
         req.json({
             success : false,
             message : error.message
         })    
+    }
+}
+
+// API to get All Bookings
+
+export async function getAllBookings(req, res){
+    try {
+        const bookings = await Booking.find({}).populate('user').populate({
+            path : "Show",
+            populate : {path : "movie"}
+        }).sort({createdAt : -1})
+
+        res.json({
+            success : true,
+            bookings
+        })
+    } 
+    catch (error) {
+        res.json({
+            success : false,
+            error : error.message
+        })
     }
 }
