@@ -1,6 +1,6 @@
-import { User } from "@clerk/express";
 import Booking from "../model/Bookings.js"
-import Show from "../model/Show";
+import Show from "../model/Show.js";
+import User from "../model/User.js";
 
 
 // Controller for check admin
@@ -23,7 +23,9 @@ export async function getDashBoardData(req, res){
     try {
 
         const booking = await Booking.find({isPaid : true});
-        const activeShows = await Show.find({showDateTime : {$gte : new Date()}}).populate('Movie');
+        console.log(booking);
+        
+        const activeShows = await Show.find({showDateTime : {$gte : new Date()}}).populate('movie');
 
         const totalUser = await User.countDocuments();
 
@@ -40,7 +42,7 @@ export async function getDashBoardData(req, res){
         })
     } 
     catch (error) {
-        req.json({
+        res.json({
             success : false,
             message : error.message
         })    
