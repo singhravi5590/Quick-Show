@@ -12,6 +12,11 @@ export async function getUserBookings(req, res){
             path : 'show',
             populate : {path : "movie"}
         }).sort({createdAt : -1})
+
+        res.json({
+            success : true,
+            bookings
+        })
     } 
     catch (error) {
         res.json({

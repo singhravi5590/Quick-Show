@@ -92,7 +92,7 @@ export async function addShow(req, res){
 
 export async function getShows(req, res){
     try {
-        const shows = await Show.find({showDateTime : {$gte : new Date()}}).populate('Movie').sort({showDateTime : 1})
+        const shows = await Show.find({showDateTime : {$gte : new Date()}}).populate('movie').sort({showDateTime : 1})
         
 
         const uniqueShows = new Set(shows.map(show => show.movie));
@@ -113,7 +113,8 @@ export async function getShows(req, res){
 // API to get a single show from the database
 export async function getShow(req, res){
     try {
-        const {movieId} = req.params();
+        const {movieId} = req.params;
+
         const shows = await Show.find({movie : movieId, showDateTime : {$gte : new Date()}});
 
         const movie = await Movie.findById(movieId);
@@ -121,11 +122,12 @@ export async function getShow(req, res){
 
         shows.forEach((show) => {
             const date = show.showDateTime.toISOString().split("T")[0];
+            
             if(!dateTime[date]){
                 dateTime[date] = []
             }
 
-            dateTime[date].push({ time : show.dateTime, showId : show._id})
+            dateTime[date].push({ time : date, showId : show._id})
         })
         
         res.json({
